@@ -9,10 +9,10 @@ const std::string RyougiDB::kDataDir = "/data";
 const std::string RyougiDB::kDataName = "data";
 
 // Default in-memory hash table size
-const uint32_t RyougiDB::kDefaultTableSize = 1048576;
+const uint32_t RyougiDB::kDefaultTableSize = 32768;
 
 // Default buffer for writing data
-const uint32_t RyougiDB::kDefaultBufferSize = 4096;
+const uint32_t RyougiDB::kDefaultBufferSize = 32768;
 
 const uint32_t RyougiDB::kMaxKeySize = 32;
 const uint32_t RyougiDB::kMaxValueSize = 256;
@@ -412,7 +412,7 @@ Status Status::NotSupported(const std::string &msg) {
 Status::Status(const Code &code, const std::string &msg):
   code_(code), msg_(msg) {}
 
-const uint32_t LRUCache::kDefaultCacheSize = 4096;
+const uint32_t LRUCache::kDefaultCacheSize = 32768;
 
 LRUCache::LRUCache(): cache_size_(kDefaultCacheSize) {}
 

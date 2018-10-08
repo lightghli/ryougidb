@@ -12,7 +12,7 @@ void GenerateData(std::vector<std::pair<std::string, std::string>>
                   &key_value_pairs) {
   std::cout << "Start GenerateData()" << std::endl;
 
-  uint32_t data_test_size = 1000;
+  uint32_t data_test_size = 1000000;
   uint32_t max_key_size = 30;
   uint32_t max_value_size = 200;
   
@@ -62,12 +62,16 @@ void RunAllTests(std::vector<std::pair<std::string, std::string>>
   ryougidb::RyougiDB db;
   ryougidb::Status status;
   
-  status = db.Create("db_test", "data_test");
-  assert(status.IsOK());
-
-  uint32_t get_times = 10;
   clock_t start_time;
   clock_t end_time;
+
+  start_time = clock();
+  status = db.Create("db_test", "data_test");
+  end_time = clock();
+  std::cout << "Create time: " << (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
+  assert(status.IsOK());
+  
+  uint32_t get_times = 1000;
   std::mt19937 gen;
   std::uniform_int_distribution<uint32_t>
     dis_index(0, key_value_pairs.size() - 1);
@@ -90,19 +94,29 @@ void RunAllTests(std::vector<std::pair<std::string, std::string>>
     th[i].join();
   }
   end_time = clock();
-  std::cout << "Time without LRUCache: " << end_time - start_time << std::endl;
+  std::cout << "Get time without LRUCache, " << get_times << " times: " <<
+               (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
 
   std::string value;
   status = db.Get("PingCAP", value);
   assert(!status.IsOK());
 
+  start_time = clock();
   status = db.Persist();
+  end_time = clock();
+  std::cout << "Persist time: " << (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
   assert(status.IsOK());
 
+  start_time = clock();
   status = db.Close();
+  end_time = clock();
+  std::cout << "Close time: " << (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
   assert(status.IsOK());
 
+  start_time = clock();
   status = db.Open("db_test");
+  end_time = clock();
+  std::cout << "Open time: " << (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
   assert(status.IsOK());
 
   start_time = clock();
@@ -121,7 +135,8 @@ void RunAllTests(std::vector<std::pair<std::string, std::string>>
     th[i].join();
   }
   end_time = clock();
-  std::cout << "Time with LRUCache: " << end_time - start_time << std::endl;
+  std::cout << "Get time with LRUCache, " << get_times << " times: " <<
+               (end_time - start_time) * 1000 / CLOCKS_PER_SEC << "ms" << std::endl;
 
   std::cout << "Finish RunAllTests()" << std::endl;
 }

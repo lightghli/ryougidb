@@ -1,2 +1,7 @@
 # VSCode settings
 .vscode
+
+# Test files
+db_test
+data_test
+*.exe
