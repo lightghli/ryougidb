@@ -25,3 +25,11 @@ Building:
 ```
 make
 ```
+
+Test result:
+- **System:** Windows 10 64-bit
+- **Hardware:** Intel Core i5-6300HQ CPU @ 2.30 GHz, 8.0GB RAM
+- **Parameters:** table_size(32768), buffer_size(32768), cache_size(32768)
+- **Create database time:** 1,000,000 random key-value pairs, 150,385 ms
+- **Get without LRUCache time:** 1,000 random Get operations, 112 ms
+- **Get with LRUCache time:** 1,000 random Get operations, 80 ms
